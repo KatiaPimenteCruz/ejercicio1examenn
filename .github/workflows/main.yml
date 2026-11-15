@@ -13,6 +13,7 @@ jobs:
           cd backend/crud-application
           mvn test
           cd ../../frontend/crudfront
+          npm ci
           CI=true npm test
   build:
     needs: test
