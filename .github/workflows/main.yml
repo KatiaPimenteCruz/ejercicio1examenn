@@ -14,8 +14,10 @@ jobs:
       - name: Copiar codigo
         uses: actions/checkout@v4
 
-      - name: Iniciar MySQL
-        run: docker compose up -d --wait db
+      - name: Verificar MySQL
+        run: |
+          docker ps
+          docker exec ejercicio1examen-db-1 mysqladmin ping -h localhost -uroot -p1234
 
       - name: Test Backend
         working-directory: backend/crud-application
