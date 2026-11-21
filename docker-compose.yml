@@ -3,29 +3,31 @@ services:
     image: mysql:8.0
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: "1234"
       MYSQL_DATABASE: crud
+    ports:
+      - "127.0.0.1:3307:3306"
     networks:
       - red36
     healthcheck:
-            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-            timeout: 20s
-            retries: 10
-    
+      test: [ "CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD --silent" ]
+      interval: 10s
+      timeout: 20s
+      retries: 10
+
   backend:
     build: ./backend/crud-application
     depends_on:
-        db:
-          condition: service_healthy
+      db:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/crud?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_DATASOURCE_PASSWORD: "1234"
     networks:
       - red36
     ports:
       - "8080:8080"
-    
 
   frontend:
     build: ./frontend/crudfront
@@ -35,5 +37,7 @@ services:
       - red36
     ports:
       - "3000:3000"
+
 networks:
   red36:
+    driver: bridge
