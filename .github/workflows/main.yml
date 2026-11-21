@@ -42,7 +42,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Construir imagenes
-        run: docker compose build
+        run: docker compose -p ejercicio1examen build
 
   deploy:
     needs: build
@@ -53,4 +53,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Desplegar contenedores
-        run: docker compose up -d --build
+        run: |
+          docker compose -p ejercicio1examen up -d --no-build --wait
+          docker compose -p ejercicio1examen ps
+
